@@ -1,0 +1,63 @@
+import pygame
+import sys
+import random
+
+# ゲームの設定
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 600
+QUANTUM_SIZE = 30
+FPS = 30
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+COLORS = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
+
+# ブロッホ球上の量子ビットを表すクラス
+class QuantumBit(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((QUANTUM_SIZE, QUANTUM_SIZE))
+        self.color = random.choice(COLORS)
+        self.image.fill(self.color)
+        self.rect = self.image.get_rect(center=(x, y))
+
+    def update(self):
+        pass
+
+# ゲームの初期化
+def initialize_game():
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Quantum Drop")
+    clock = pygame.time.Clock()
+    return screen, clock
+
+# メインゲームループ
+def main():
+    screen, clock = initialize_game()
+    all_sprites = pygame.sprite.Group()
+
+    # ブロッホ球上に量子ビットをランダムに配置
+    for _ in range(10):
+        x = random.randint(0, SCREEN_WIDTH)
+        y = random.randint(0, SCREEN_HEIGHT)
+        quantum_bit = QuantumBit(x, y)
+        all_sprites.add(quantum_bit)
+
+    running = True
+    while running:
+        screen.fill(BLACK)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        all_sprites.update()
+        all_sprites.draw(screen)
+        pygame.display.flip()
+        clock.tick(FPS)
+
+    pygame.quit()
+    sys.exit()
+
+if __name__ == "__main__":
+    main()
